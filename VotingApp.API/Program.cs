@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using VotingApp.API.Helpers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +10,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var appConfig = builder.Configuration.Get<AppConfig>();
+
+builder.Services.AddDbContext<DBAccess>(options => options.UseSqlServer(appConfig.ConnectionStrings.SQLdb));
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
