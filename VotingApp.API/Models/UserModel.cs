@@ -19,7 +19,10 @@ namespace VotingApp.API.Models
 
         public UserTypes UserType { get; set; }
 
-        public bool IsVoated { get; set; }
+        public bool IsVoted { get; set; }
+
+        [NotMapped]
+        public int CandidateVoteTotal { get; set; }
     }
 
 }

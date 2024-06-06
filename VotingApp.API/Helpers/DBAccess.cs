@@ -11,5 +11,7 @@ namespace VotingApp.API.Helpers
 
         public DbSet<UserModel> Users { get; set; }
 
+        public DbSet<VoteCountModel> VoteCountModel { get; set; }
+
     }
 }

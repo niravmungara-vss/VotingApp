@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using VotingApp.API.Helpers;
+using VotingApp.API.Repo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddMvc().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    //options.JsonSerializerOptions.Converters.Add(new DecimalFormatConverter());
+});
+
 var appConfig = builder.Configuration.Get<AppConfig>();
 
 builder.Services.AddDbContext<DBAccess>(options => options.UseSqlServer(appConfig.ConnectionStrings.SQLdb));
+builder.Services.AddTransient<IVoteCountRepository, VoteCountRepository>();
 
 var app = builder.Build();
 
@@ -28,6 +37,15 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseCors(builder => builder
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .SetIsOriginAllowed(origin => true)
+                    .AllowAnyOrigin()
+                    .Build());
+
 app.MapControllers();
 
 app.Run();
+
+

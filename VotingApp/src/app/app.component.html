@@ -1,0 +1,102 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm p-3 mb-3 bg-white">
+  <h4>Welcome to the, {{ title }}</h4>
+</nav>
+<div class="row m-0">
+  <div class="col-6">
+    <table class="table" width="100%">
+      <tr class="border-bottom shadow bg-white">
+        <td colspan="2" class="p-1">Voters
+          <a class="btn btn-primary btn-sm px-1 py-0" (click)="isAddNewVoter = true;">+</a>
+        </td>
+      </tr>
+      <tr>
+        <th class="w-75">
+          Name
+        </th>
+        <th>Has Voted</th>
+      </tr>
+      <tr *ngIf="isAddNewVoter">
+        <td>
+          <input type="text" class="form-control w-75" [(ngModel)]="VoterName" placeholder="Name">
+        </td>
+        <td>
+          <button class="btn btn-primary px-1 py-0" type="button" (click)="saveVoter()">Save</button>
+          <button class="btn btn-secondary px-1 py-0 mx-1" type="button"
+            (click)="VoterName='';isAddNewVoter = false">Cancel</button>
+        </td>
+      </tr>
+      @for (item of lstVoters; track $index) {
+      <tr>
+        <td>{{item.Name}}</td>
+        <td><input type="checkbox" [checked]="item.IsVoted" disabled></td>
+      </tr>
+      }
+    </table>
+  </div>
+  <div class="col-6">
+    <table class="table" width="100%">
+      <tr class="border-bottom shadow bg-white">
+        <td colspan="2" class="p-1">Candidates
+          <a class="btn btn-primary btn-sm px-1 py-0" (click)="isAddNewCandidate = true;">+</a>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Name
+        </th>
+        <th>Total Vote</th>
+      </tr>
+      <tr *ngIf="isAddNewCandidate">
+        <td>
+          <input type="text" class="form-control w-75" [(ngModel)]="CandidateName" placeholder="Name">
+        </td>
+        <td>
+          <button class="btn btn-primary px-1 py-0" type="button" (click)="saveCandidate()">Save</button>
+          <button class="btn btn-secondary px-1 py-0 mx-1" type="button"
+            (click)="CandidateName='';isAddNewCandidate = false">Cancel</button>
+        </td>
+      </tr>
+      @for (item of lstCandidates; track $index) {
+      <tr>
+        <td>{{item.Name}}</td>
+        <td>{{item.CandidateVoteTotal}}</td>
+      </tr>
+      }
+    </table>
+  </div>
+</div>
+<hr>
+<div class="row m-0">
+  <form [formGroup]="fg">
+    <div class="row m-0">
+      <div class="col-3">
+        <div class="form-group">
+          <label for="ddlIam">I am</label>
+          <select id="ddlIam" class="form-control" formControlName="VoterUserId">
+            <option value="0">Select Voter</option>
+            @for (item of lstVoters; track $index) {
+            <option [value]="item.Id">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="form-group">
+          <label for="ddlIvotefor">I vote for</label>
+          <select id="ddlIvotefor" class="form-control" formControlName="CandidateUserId">
+            <option value="0">Select Candidate</option>
+            @for (item of lstCandidates; track $index) {
+            <option [value]="item.Id">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="col-3 my-auto">
+        <button class="btn btn-primary px-1 py-0" type="submit" (click)="saveVote()">Submit</button>
+        <button class="btn btn-secondary px-1 py-0 mx-1" type="reset">Cancel</button>
+      </div>
+    </div>
+  </form>
+
+</div>
+<router-outlet />
